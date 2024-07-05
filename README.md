@@ -1,10 +1,6 @@
 # Rendimiento
 
-Analizar, detectar y solventar problemas de rendimiento es posiblemente una de las tareas más difíciles en el ámbito de la informática y, **en mi opinión**, especialmente en el mundo Web.
-
-Principalmente por dos motivos: por un lado, JavaScript y por otro, el modelo de documento.
-
-## JavaScript
+## Contexto
 
 JavaScript es interpretado, tipado dinámicamente y con un sistema de _Garbage Collection_ que hace que el desarrollo sea muy ágil y sencillo, como contrapunto esto límita mucho el control que tenemos sobre lo que ocurre a bajo nivel: no podemos liberar memoria cuando lo necesitamos, no podemos usar tipos numéricos (salvo el caso específico de `BigInt`) y tenemos que esperar a que el código sea interpretado para ser compilado y optimizado a byte-code (y en algunos casos a código máquina).
 
