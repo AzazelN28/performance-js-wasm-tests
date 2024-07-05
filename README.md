@@ -8,7 +8,7 @@ WebAssembly aparece como solución a todos estos problemas, implementando una m�
 
 > <sup>1</sup>La memoria de un módulo de WebAssembly sigue siendo un objeto de JavaScript, un `ArrayBuffer` que puede crecer y que está sujeto a las reglas del _Garbage Collector_ de JavaScript.
 > 
-> <sup>2</sup>Los punteros de WebAssembly usan enteros de 32-bit (con signo), esto límita el máximo de memoria direccionable a 2 GB.
+> <sup>2</sup>Los punteros de WebAssembly usan enteros de 32-bit (con signo) así que esto límita el máximo de memoria direccionable a 2 GB (aunque ya se está trabajando en un sistema de punteros de 64-bit https://github.com/WebAssembly/memory64).
 
 ## Document Object Model
 
