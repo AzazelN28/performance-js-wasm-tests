@@ -1,0 +1,27 @@
+html, body {
+  margin: 0;
+  padding: 0;
+
+  width: 100dvw;
+  height: 100dvh;
+
+  background-color: #000;
+
+  overflow: hidden;
+}
+
+div {
+  background-color: #fff;
+  position: absolute;
+  will-change: transform;
+}
+
+svg {
+  /* En términos de rendimiento: */
+  /* crispEdges > optimizeSpeed > geometricPrecision */
+  shape-rendering: optimizeSpeed;
+}
+
+rect {
+  fill: #fff;
+}
