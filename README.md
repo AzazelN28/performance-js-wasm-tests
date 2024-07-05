@@ -7,6 +7,7 @@ JavaScript es interpretado, tipado dinámicamente y con un sistema de _Garbage C
 WebAssembly aparece como solución a todos estos problemas, implementando una máquina virtual que ejecuta código compilado, con tipos (y algunas extensiones interesantes como [SIMD](https://github.com/WebAssembly/simd)) y con control mayor<sup>1</sup> sobre la memoria<sup>2</sup>.
 
 > <sup>1</sup>La memoria de un módulo de WebAssembly sigue siendo un objeto de JavaScript, un `ArrayBuffer` que puede crecer y que está sujeto a las reglas del _Garbage Collector_ de JavaScript.
+> 
 > <sup>2</sup>Los punteros de WebAssembly usan enteros de 32-bit (con signo), esto límita el máximo de memoria direccionable a 2 GB.
 
 ## Document Object Model
