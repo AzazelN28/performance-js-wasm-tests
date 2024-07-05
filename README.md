@@ -6,7 +6,7 @@ Principalmente por dos motivos: por un lado, JavaScript y por otro, el modelo de
 
 ## JavaScript
 
-JavaScript es un lenguaje interpretado, tipado dinámicamente y con un sistema de _Garbage Collection_ que hace que el desarrollo sea muy ágil y sencillo pero como contrapunto esto límita mucho el control que tenemos sobre lo que ocurre a bajo nivel: no podemos liberar memoria cuando lo necesitamos, no podemos usar tipos numéricos (salvo el caso específico de `BigInt`) y tenemos que esperar a que el código sea interpretado para ser compilado y optimizado a byte-code (y en algunos casos a código máquina).
+JavaScript es interpretado, tipado dinámicamente y con un sistema de _Garbage Collection_ que hace que el desarrollo sea muy ágil y sencillo, como contrapunto esto límita mucho el control que tenemos sobre lo que ocurre a bajo nivel: no podemos liberar memoria cuando lo necesitamos, no podemos usar tipos numéricos (salvo el caso específico de `BigInt`) y tenemos que esperar a que el código sea interpretado para ser compilado y optimizado a byte-code (y en algunos casos a código máquina).
 
 WebAssembly aparece como solución a todos estos problemas, implementando una máquina virtual que ejecuta código compilado, con tipos (y algunas extensiones interesantes como [SIMD](https://github.com/WebAssembly/simd)) y con control mayor<sup>1</sup> sobre la memoria.
 
@@ -18,7 +18,7 @@ HTML, CSS y SVG son tecnologías pensadas, principalmente, para la representaci�
 
 Sin embargo, en cualquiera de estos casos es el navegador el responsable último de cómo ese modelo de documento se representa en pantalla y cuáles son los atajos a tomar para optimizar esa representación. Y el navegador está hecho para representar documentos, no para jugar al [DOOM 3](https://wasm.continuation-labs.com/d3demo/) o al [Homeworld](https://gardensofkadesh.github.io/), o no al menos en origen. Para cubrir estos casos surgió `<canvas>` y las APIs de canvas 2D, WebGL y la recién publicada WebGPU.
 
-## Rationale
+## Pruebas
 
 La idea es poder comparar cuál es la diferencia entre actualizar el DOM (HTML y SVG) y renderizar en un `<canvas>` con diferentes contextos: 2D, WebGL 2 y WebGL2 con un módulo de WebAssembly hecho especialmente para actualizar los buffers de WebGL.
 
@@ -101,7 +101,7 @@ Y por último, aquí tenemos la mejor versión de todas, reduciendo el tiempo de
 
 - Tener que utilizar un lenguaje que normalmente se sale del _scope_ habitual de un equipo Web. Aunque existen alternativas como [AssemblyScript](https://assemblyscript.org), basado en [TypeScript](https://www.typescriptlang.org/).
 - Límite de 4 GB de memoria. Esto es así porque [WebAssembly utiliza punteros de 32 bits](https://v8.dev/blog/4gb-wasm-memory#:~:text=Thanks%20to%20recent%20work%20in,512MB%20or%201GB%20of%20memory!) para las direcciones de memoria. La nueva especificación de `wasm64` añadirá punteros de 64 bits para direccionar más de 4GB de RAM.
-- La interoperabilidad entre JavaScript y WebAssembly es costosa.
+- Las llamadas entre JavaScript y WebAssembly son costosas.
 
 #### Ventajas
 
@@ -114,7 +114,7 @@ Para implementar la parte de WebAssembly decidí que quería probar algunos leng
 
 #### C
 
-Es de las opciones más sencillas y de mis favoritas. El código apenas son 19 líneas y en general todo funcionó a la primera.
+Es de las opciones más sencillas. El código apenas son 19 líneas y en general todo funcionó a la primera.
 
 ```c
 #define MAX_STARS 10000
@@ -144,7 +144,7 @@ Este módulo lo compilé con `-Wl,--export-all` para no tener que estar añadien
 clang --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -o update-stars.wasm update-stars.c
 ```
 
-Y el código compilado es de los más pequeños.
+NOTA: El código compilado es de los más pequeños.
 
 #### Odin
 
@@ -186,11 +186,9 @@ odin build update-stars.odin -extra-linker-flags:"--export-dynamic" -file -targe
 
 > Uno de los problemas que tuve al compilar el código fue que a pesar de añadir el atributo `@export` a la variable `stars`, ésta no se exportaba en el `.wasm`. Pero la gente de [r/odinlang](https://www.reddit.com/r/odinlang/comments/1ao6a62/how_to_export_variables_to_webassembly/) fue muy maja y en seguida me sugirieron una solución (añadir `-extra-linker-flags:"--export-dynamic"`).
 
-Todavía necesito experimentar más con Odin pero se ha convertido rápidamente en uno de mis lenguajes fetiche.
-
 #### Zig
 
-[Zig](https://ziglang.org) es de los lenguajes modernos que más tracción está ganando y que tiene algunas características super interesantes: como `comptime`, las sentencias `defer` o las sentencias `try` y los `Slices` que ya mencioné en Odin. El principal problema es que el lenguaje todavía se encuentra en una fase muy beta (la versión actual es la 0.11.0) y no hay garantías de que el lenguaje no vaya a cambiar recientemente rompiendo la compatibilidad hacia atrás.
+[Zig](https://ziglang.org) es de los lenguajes modernos que más tracción está ganando y que tiene algunas características muy interesantes como: `comptime`, las sentencias `defer` o las sentencias `try` y los `Slices` que ya mencioné en Odin. El principal problema es que el lenguaje todavía se encuentra en una fase muy beta (la versión actual es la 0.13.0) y no hay garantías de que el lenguaje no rompa la compatibilidad hacia atrás.
 
 El código es muy similar al de C u Odin:
 
@@ -263,7 +261,7 @@ Una vez tenemos nuestro `build.zig` y nuestro `src/main.zig` sólo tenemos que e
 
 #### Rust
 
-Sé que mucha gente se sorprenderá con esto pero de todas estas opciones, ésta es la que menos me ha gustado. [Rust](https://rust-lang.org) tiene un montón de características super interesantes pero de todos los lenguajes, me ha parecido el más farragoso para trabajar con WebAssembly, al menos para hacer algo pequeño como lo que quiero hacer.
+De todas estas opciones, ésta es la que menos me ha gustado. [Rust](https://rust-lang.org) tiene un montón de características muy interesantes pero de todos los lenguajes, me ha parecido el más farragoso para trabajar con WebAssembly, al menos para hacer algo pequeño como lo que quiero hacer.
 
 ```rust
 use wasm_bindgen::prelude::*;
